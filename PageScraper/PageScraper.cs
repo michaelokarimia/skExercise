@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
@@ -7,25 +8,31 @@ namespace PageScraper
 {
     public class PageScraper
     {
-        private readonly string url;
-        private readonly string singleEventListing;
-        private readonly string priceXpath;
-        private readonly string eventNameXpath;
-        private readonly string venueCityXpath;
-        private readonly string venueNameXpath;
-        private readonly string eventDateXpath;
+        private string url;
+        private string singleEventListing;
+        private string priceXpath;
+        private string eventNameXpath;
+        private string venueCityXpath;
+        private string venueNameXpath;
+        private string eventDateXpath;
+
+        private void init(ScraperConfig config)
+        {
+            url = config.Url;
+            singleEventListing = config.SingleEventListing;
+            eventNameXpath = config.EventNameXpath;
+            eventDateXpath = config.EventDateXpath;
+            venueNameXpath = config.VenueNameXpath;
+            venueCityXpath = config.VenueCityXpath;
+            priceXpath = config.PriceXpath;
+
+        }
 
         public PageScraper()
         {
-            url = "http://www.wegottickets.com/searchresults/page/1/all";
-
-            singleEventListing = "//*[@class='ListingOuter']";
-            priceXpath = "//div[@class='searchResultsPrice']/strong";
-            eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a";
-            venueCityXpath = "//*[@class='venuetown']";
-            venueNameXpath = "//*[@class='venuename']";
-            eventDateXpath = "//div[@class='ListingAct']/blockquote/p";
+             init(ConfigurationFactory.getConfiguration("configFile"));
         }
+
 
         public void Scrape()
         {
@@ -72,5 +79,69 @@ namespace PageScraper
         }   
 
         
+    }
+
+    public static class ConfigurationFactory
+    {
+        public static ScraperConfig getConfiguration(string configLocation)
+        {
+            switch (configLocation)
+            {
+                default :
+                    return getDefaultSettings();
+            }
+        }
+
+        private static ScraperConfig getDefaultSettings()
+        {
+            return new ScraperConfig
+                (
+                "http://www.wegottickets.com/searchresults/page/1/all",
+                "//*[@class='ListingOuter']",
+                "//div[@class='searchResultsPrice']/strong",
+                "//div[@class='ListingAct']/blockquote/h3/a",
+                "//*[@class='venuetown']",
+                "//*[@class='venuename']",
+                "//div[@class='ListingAct']/blockquote/p"
+                );
+
+        }
+    }
+
+
+        //url = "http://www.wegottickets.com/searchresults/page/1/all",
+        //        singleEventListing = "//*[@class='ListingOuter']",
+        //        priceXpath = "//div[@class='searchResultsPrice']/strong",
+        //        eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a",
+        //        venueCityXpath = "//*[@class='venuetown']",
+        //        venueNameXpath = "//*[@class='venuename']",
+        //        eventDateXpath = "//div[@class='ListingAct']/blockquote/p"
+
+    public class ScraperConfig
+    {
+        public ScraperConfig(string url, string ListItemXpath, string priceXPath, string dateTimeXpath, string venueCityXpath, string venueNameXPath, string lineUpXpath)
+        {
+            Url = url;
+            SingleEventListing = ListItemXpath;
+            PriceXpath = priceXPath;
+            EventDateXpath = lineUpXpath;
+            VenueCityXpath = venueCityXpath;
+            VenueNameXpath = venueNameXPath;
+            EventNameXpath = dateTimeXpath;
+        }
+
+        public string Url { get; private set; }
+
+        public string SingleEventListing { get; private set; }
+
+        public string EventNameXpath { get; private set; }
+
+        public string EventDateXpath { get; private set; }
+
+        public string VenueNameXpath { get; private set; }
+
+        public string VenueCityXpath { get; private set; }
+
+        public string PriceXpath { get; private set; }
     }
 }
