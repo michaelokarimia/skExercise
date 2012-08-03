@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using HtmlAgilityPack;
 
 
@@ -9,39 +8,36 @@ namespace PageScraper
 {
     public class PageScraper
     {
-        string url = "http://www.wegottickets.com/searchresults/page/1/all";
+        private string URL;
+        private    Func<HtmlNode, IEnumerable<HtmlAttribute>> EventListingsSelector;
+         
+        public PageScraper()
+        {
+            EventListingsSelector = x =>
+                       x.ChildNodes.SelectMany(
+                           y => y.Attributes.AttributesWithName("class")
+                                    .Where(z => z.Value == "ListingOuter"));
 
-       public void Scrape()
+            URL = "http://www.wegottickets.com/searchresults/page/1/all";
+        }
 
-       {
-           HtmlWeb htmlWeb = new HtmlWeb();
-
-           HtmlDocument doc = htmlWeb.Load(url);
+        public void Scrape()
+        {
+           var htmlWeb = new HtmlWeb();
+           HtmlDocument doc = htmlWeb.Load(URL);
            Document = doc;
-       }
+        }
 
         public HtmlDocument Document { get; set; }
 
         public List<HtmlAttribute> GetAllVisbleEventListings()
         {
-            List<string> matchedNodes = new List<string>();
-            var content = Document.GetElementbyId("content");
-            var contentDescendants =  content.Descendants();
-
-            var inners = contentDescendants.SelectMany(x => x.ChildNodes);
-
+           
             return
-                inners.SelectMany(x => x.Attributes.AttributesWithName("class").Where(y => y.Value == "ListingOuter")).
-                    ToList();
-            //.Where(x=>x.Name.Equals("div")).ToList();
-
-            //   divsWithClass.
-            //      SelectMany(x => x.Attributes.AttributesWithName("class").Where(y=> y.Value == "ListingOuter")).ToList();
-
-
-
-
-
+                Document.GetElementbyId("content").Descendants().
+                    SelectMany(
+                        EventListingsSelector)
+                            .ToList();
         }
     }
 }
