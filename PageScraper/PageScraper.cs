@@ -34,21 +34,18 @@ namespace PageScraper
         {
             get
             {
-                
                 var eventListings = GetAllVisbleEventListings();
 
-                EventShow show = new EventShow();
-
-                foreach (HtmlNode eventListing in eventListings)
+                var eventShowList = new List<EventShow>();
+                
+                foreach (HtmlNode listing in eventListings)
                 {
-                    show = new EventShow
+                    eventShowList.Add(new EventShow
                                {
-                                   Price = WebUtility.HtmlDecode(eventListing.SelectSingleNode(priceXpath).InnerText)
-                               };
+                                   Price = WebUtility.HtmlDecode(listing.SelectSingleNode(priceXpath).InnerText)
+                               });
                 }
 
-                var eventShowList = new List<EventShow>();
-                eventShowList.Add(show);
 
                 return eventShowList;
 
