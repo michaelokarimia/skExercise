@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using HtmlAgilityPack;
-
+using System.Web;
 
 namespace PageScraper
 {
@@ -11,6 +12,7 @@ namespace PageScraper
         private string URL;
         private    Func<HtmlNode, IEnumerable<HtmlAttribute>> EventListingsSelector;
         private readonly string SingleEventListing;
+        private string priceXpath;
 
         public PageScraper()
         {
@@ -22,6 +24,7 @@ namespace PageScraper
             URL = "http://www.wegottickets.com/searchresults/page/1/all";
 
             SingleEventListing = "//*[@class='ListingOuter']";
+            priceXpath = "//div[@class='searchResultsPrice']/strong";
         }
 
         public void Scrape()
@@ -33,11 +36,27 @@ namespace PageScraper
 
         public HtmlDocument Document { get; set; }
 
-        public IList<Event> EventListings
+        public IList<EventShow> EventListings
         {
             get
             {
-                return new List<Event> {new Event()};
+                
+                var eventListings = GetAllVisbleEventListings();
+
+                EventShow show = new EventShow();
+
+                foreach (HtmlNode eventListing in eventListings)
+                {
+                    show = new EventShow
+                               {
+                                   Price = WebUtility.HtmlDecode(eventListing.SelectSingleNode(priceXpath).InnerText)
+                               };
+                }
+
+                var eventShowList = new List<EventShow>();
+                eventShowList.Add(show);
+
+                return eventShowList;
 
             }
         }
@@ -51,7 +70,7 @@ namespace PageScraper
         
     }
 
-    public class Event
+   public class EventShow
     {
 
         public String Price { get; set; }
