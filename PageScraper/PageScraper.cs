@@ -12,6 +12,8 @@ namespace PageScraper
         private string URL;
         private readonly string SingleEventListing;
         private string priceXpath;
+        private string eventNameXpath;
+        private string venueCityXpath;
 
         public PageScraper()
         {
@@ -19,12 +21,14 @@ namespace PageScraper
 
             SingleEventListing = "//*[@class='ListingOuter']";
             priceXpath = "//div[@class='searchResultsPrice']/strong";
+            eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a";
+            venueCityXpath = "//*[@class='venuetown']";
         }
 
         public void Scrape()
         {
            var htmlWeb = new HtmlWeb();
-           HtmlDocument doc = htmlWeb.Load(URL);
+           var doc = htmlWeb.Load(URL);
            Document = doc;
         }
 
@@ -42,7 +46,9 @@ namespace PageScraper
                 {
                     eventShowList.Add(new EventShow
                                {
-                                   Price = WebUtility.HtmlDecode(listing.SelectSingleNode(priceXpath).InnerText)
+                                   Price = WebUtility.HtmlDecode(listing.SelectSingleNode(priceXpath).InnerText),
+                                   EventName = WebUtility.HtmlDecode(listing.SelectSingleNode(eventNameXpath).InnerText),
+                                   VenueCity = WebUtility.HtmlDecode(listing.SelectSingleNode(venueCityXpath).InnerText)
                                });
                 }
 
@@ -65,5 +71,9 @@ namespace PageScraper
     {
 
         public String Price { get; set; }
+
+       public String EventName { get; set; }
+
+       public string VenueCity { get; set; }
     }
 }

@@ -32,5 +32,17 @@ namespace UnitTests
         {
             Assert.AreEqual("£10.00", scraper.EventListings[0].Price);
         }
+
+        [Test]
+        public void GetsNameOfFirstEvent()
+        {
+            Assert.AreEqual("4 TOP STAND UPS", scraper.EventListings[0].EventName);
+        }
+
+        [Test]
+        public void GetVenueCityOfFirstEvent()
+        {
+            Assert.AreEqual("LONDON: ", scraper.EventListings[0].VenueCity);
+        }
     }
 }
