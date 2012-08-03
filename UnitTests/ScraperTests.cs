@@ -16,7 +16,7 @@ namespace UnitTests
         }
 
         [Test]
-        public void ScraperCanGetHTMLGivenAValidUrl()
+        public void ScraperCanGetHtmlGivenAValidUrl()
         {
             Assert.NotNull(scraper.Document);
         }
@@ -24,7 +24,7 @@ namespace UnitTests
         [Test]
         public void CanFindTenEventsPerPage()
         {
-            Assert.AreEqual(10, scraper.GetAllVisbleEventListings().Count);
+            Assert.AreEqual(10, scraper.EventListings.Count);
         }
 
         [Test]

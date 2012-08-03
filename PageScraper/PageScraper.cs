@@ -10,17 +10,11 @@ namespace PageScraper
     public class PageScraper
     {
         private string URL;
-        private    Func<HtmlNode, IEnumerable<HtmlAttribute>> EventListingsSelector;
         private readonly string SingleEventListing;
         private string priceXpath;
 
         public PageScraper()
         {
-            EventListingsSelector = x =>
-                                    x.ChildNodes.SelectMany(
-                                        y => y.Attributes.AttributesWithName("class")
-                                                 .Where(z => z.Value == "ListingOuter"));
-
             URL = "http://www.wegottickets.com/searchresults/page/1/all";
 
             SingleEventListing = "//*[@class='ListingOuter']";
@@ -61,7 +55,7 @@ namespace PageScraper
             }
         }
 
-        public List<HtmlNode> GetAllVisbleEventListings()
+        private List<HtmlNode> GetAllVisbleEventListings()
         {
             return
                 Document.DocumentNode.SelectNodes(SingleEventListing).ToList();
