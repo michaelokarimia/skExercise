@@ -18,7 +18,7 @@ namespace UnitTests
         [Test]
         public void ScraperCanGetHtmlGivenAValidUrl()
         {
-            Assert.NotNull(scraper.Document);
+            Assert.NotNull(scraper.HasPageBeenScraped);
         }
 
         [Test]
@@ -43,6 +43,18 @@ namespace UnitTests
         public void GetVenueCityOfFirstEvent()
         {
             Assert.AreEqual("LONDON: ", scraper.EventListings[0].VenueCity);
+        }
+
+        [Test]
+        public void GetVenueNameOfFirstEvent()
+        {
+            Assert.AreEqual("Headliners Comedy Club @ George IV", scraper.EventListings[0].VenueName);
+        }
+
+        [Test]
+        public void GetEventTimeOfFirstEvent()
+        {
+            Assert.AreEqual("Bob Mills, Addy Borgh, Earl Okin, Simon Bligh", scraper.EventListings[0].DateTime);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
-using System.Web;
 
 namespace PageScraper
 {
@@ -14,6 +13,8 @@ namespace PageScraper
         private string priceXpath;
         private string eventNameXpath;
         private string venueCityXpath;
+        private string venueNameXpath;
+        private string eventDateXpath;
 
         public PageScraper()
         {
@@ -23,6 +24,8 @@ namespace PageScraper
             priceXpath = "//div[@class='searchResultsPrice']/strong";
             eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a";
             venueCityXpath = "//*[@class='venuetown']";
+            venueNameXpath = "//*[@class='venuename']";
+            eventDateXpath = "//div[@class='ListingAct']/blockquote/p";
         }
 
         public void Scrape()
@@ -30,9 +33,10 @@ namespace PageScraper
            var htmlWeb = new HtmlWeb();
            var doc = htmlWeb.Load(URL);
            Document = doc;
+           HasPageBeenScraped = true;
         }
 
-        public HtmlDocument Document { get; set; }
+        private HtmlDocument Document { get; set; }
 
         public IList<EventShow> EventListings
         {
@@ -48,7 +52,9 @@ namespace PageScraper
                                {
                                    Price = WebUtility.HtmlDecode(listing.SelectSingleNode(priceXpath).InnerText),
                                    EventName = WebUtility.HtmlDecode(listing.SelectSingleNode(eventNameXpath).InnerText),
-                                   VenueCity = WebUtility.HtmlDecode(listing.SelectSingleNode(venueCityXpath).InnerText)
+                                   VenueCity = WebUtility.HtmlDecode(listing.SelectSingleNode(venueCityXpath).InnerText),
+                                   VenueName = WebUtility.HtmlDecode(listing.SelectSingleNode(venueNameXpath).InnerText),
+                                   DateTime = WebUtility.HtmlDecode(listing.SelectSingleNode(eventDateXpath).LastChild.InnerText)
                                });
                 }
 
@@ -58,7 +64,9 @@ namespace PageScraper
             }
         }
 
-        private List<HtmlNode> GetAllVisbleEventListings()
+        public bool HasPageBeenScraped { get; private set; }
+
+        private IEnumerable<HtmlNode> GetAllVisbleEventListings()
         {
             return
                 Document.DocumentNode.SelectNodes(SingleEventListing).ToList();
@@ -70,10 +78,14 @@ namespace PageScraper
    public class EventShow
     {
 
-        public String Price { get; set; }
+       public string Price { get; set; }
 
-       public String EventName { get; set; }
+       public string EventName { get; set; }
 
        public string VenueCity { get; set; }
+
+       public string VenueName { get; set; }
+
+       public string DateTime { get; set; }
     }
 }
