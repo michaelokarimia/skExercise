@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
@@ -8,19 +7,19 @@ namespace PageScraper
 {
     public class PageScraper
     {
-        private string URL;
-        private readonly string SingleEventListing;
-        private string priceXpath;
-        private string eventNameXpath;
-        private string venueCityXpath;
-        private string venueNameXpath;
-        private string eventDateXpath;
+        private readonly string url;
+        private readonly string singleEventListing;
+        private readonly string priceXpath;
+        private readonly string eventNameXpath;
+        private readonly string venueCityXpath;
+        private readonly string venueNameXpath;
+        private readonly string eventDateXpath;
 
         public PageScraper()
         {
-            URL = "http://www.wegottickets.com/searchresults/page/1/all";
+            url = "http://www.wegottickets.com/searchresults/page/1/all";
 
-            SingleEventListing = "//*[@class='ListingOuter']";
+            singleEventListing = "//*[@class='ListingOuter']";
             priceXpath = "//div[@class='searchResultsPrice']/strong";
             eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a";
             venueCityXpath = "//*[@class='venuetown']";
@@ -31,20 +30,20 @@ namespace PageScraper
         public void Scrape()
         {
            var htmlWeb = new HtmlWeb();
-           var doc = htmlWeb.Load(URL);
+           var doc = htmlWeb.Load(url);
            Document = doc;
            HasPageBeenScraped = true;
         }
 
         private HtmlDocument Document { get; set; }
 
-        public IList<EventShow> EventListings
+        public IList<IEventShow> EventListings
         {
             get
             {
                 var eventListings = GetAllVisbleEventListings();
 
-                var eventShowList = new List<EventShow>();
+                var eventShowList = new List<IEventShow>();
                 
                 foreach (HtmlNode listing in eventListings)
                 {
@@ -69,23 +68,9 @@ namespace PageScraper
         private IEnumerable<HtmlNode> GetAllVisbleEventListings()
         {
             return
-                Document.DocumentNode.SelectNodes(SingleEventListing).ToList();
+                Document.DocumentNode.SelectNodes(singleEventListing).ToList();
         }   
 
         
-    }
-
-   public class EventShow
-    {
-
-       public string Price { get; set; }
-
-       public string EventName { get; set; }
-
-       public string VenueCity { get; set; }
-
-       public string VenueName { get; set; }
-
-       public string DateTime { get; set; }
     }
 }
