@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
@@ -18,7 +15,7 @@ namespace PageScraper
         private string venueNameXpath;
         private string eventDateXpath;
 
-        private void init(ScraperConfig config)
+        private void Initalise(ScraperConfig config)
         {
             url = config.Url;
             singleEventListing = config.SingleEventListing;
@@ -32,7 +29,7 @@ namespace PageScraper
 
         public PageScraper()
         {
-             init(ConfigurationFactory.getConfiguration("configFile"));
+             Initalise(ConfigurationFactory.GetConfiguration("configFile"));
         }
 
 
@@ -81,90 +78,5 @@ namespace PageScraper
         }   
 
         
-    }
-
-    public static class ConfigurationFactory
-    {
-        public static ScraperConfig getConfiguration(string configLocation)
-        {
-            switch (configLocation)
-            {
-                case "configFile":
-                    return getFromConfigfile();
-                    break;
-                default :
-                    return getDefaultSettings();
-            }
-        }
-
-        private static ScraperConfig getFromConfigfile()
-        {
-           NameValueCollection appSettings =
-           ConfigurationManager.AppSettings;
-
-
-            var wotist = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var thingy = ConfigurationSettings.AppSettings["url"];
-            return new ScraperConfig(appSettings.Get("url"),
-                appSettings.Get("singleEventListItemXpath"),
-                appSettings.Get("priceXpath"),
-                appSettings.Get("dateXPath"),
-                appSettings.Get("venueCity"),
-                appSettings.Get("venueName"),
-                appSettings.Get("eventName")
-                );
-        }
-
-        private static ScraperConfig getDefaultSettings()
-        {
-            return new ScraperConfig
-                (
-                "http://www.wegottickets.com/searchresults/page/1/all",
-                "//*[@class='ListingOuter']",
-                "//div[@class='searchResultsPrice']/strong",
-                "//div[@class='ListingAct']/blockquote/h3/a",
-                "//*[@class='venuetown']",
-                "//*[@class='venuename']",
-                "//div[@class='ListingAct']/blockquote/p"
-                );
-
-        }
-    }
-
-
-        //url = "http://www.wegottickets.com/searchresults/page/1/all",
-        //        singleEventListing = "//*[@class='ListingOuter']",
-        //        priceXpath = "//div[@class='searchResultsPrice']/strong",
-        //        eventNameXpath = "//div[@class='ListingAct']/blockquote/h3/a",
-        //        venueCityXpath = "//*[@class='venuetown']",
-        //        venueNameXpath = "//*[@class='venuename']",
-        //        eventDateXpath = "//div[@class='ListingAct']/blockquote/p"
-
-    public class ScraperConfig
-    {
-        public ScraperConfig(string url, string ListItemXpath, string priceXPath, string dateTimeXpath, string venueCityXpath, string venueNameXPath, string lineUpXpath)
-        {
-            Url = url;
-            SingleEventListing = ListItemXpath;
-            PriceXpath = priceXPath;
-            EventDateXpath = lineUpXpath;
-            VenueCityXpath = venueCityXpath;
-            VenueNameXpath = venueNameXPath;
-            EventNameXpath = dateTimeXpath;
-        }
-
-        public string Url { get; private set; }
-
-        public string SingleEventListing { get; private set; }
-
-        public string EventNameXpath { get; private set; }
-
-        public string EventDateXpath { get; private set; }
-
-        public string VenueNameXpath { get; private set; }
-
-        public string VenueCityXpath { get; private set; }
-
-        public string PriceXpath { get; private set; }
     }
 }

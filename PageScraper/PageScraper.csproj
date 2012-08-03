@@ -45,10 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationFactory.cs" />
     <Compile Include="EventShow.cs" />
     <Compile Include="IEventShow.cs" />
     <Compile Include="PageScraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScraperConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
