@@ -26,10 +26,10 @@ namespace UnitTests
             Assert.NotNull(scraper.Document);
         }
 
-    [Test]
+        [Test]
         public void CanfindNode()
-    {
-        Assert.Equals(10, scraper.GetAllEventNodes().Count);
-    }
+        {
+            Assert.Equals(10, scraper.GetAllEventNodes().Count);
+        }
     }
 }

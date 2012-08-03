@@ -26,8 +26,17 @@ namespace PageScraper
         {
             List<string> matchedNodes = new List<string>();
             var content = Document.GetElementbyId("content");
-            var nodes =  content.Descendants();
-            //TODO use linq to grab the correct listings
+            var contentDescendants =  content.Descendants();
+
+            var nodes = contentDescendants.SelectMany(x => x.ChildNodes);
+            var inners = contentDescendants.SelectMany(x => x.ChildNodes);
+
+            var divsWithClass = inners.Where(x => x.Name == "div" && x.Attributes.Contains("class"));
+
+            var divsWithListingClass = divsWithClass.
+                SelectMany(x => x.Attributes.AttributesWithName("class").Where(y=> y.Value == "ListingOuter"));
+
+            //TODO use linq to grab the correct listings)))))
             
 
             foreach (HtmlNode node in nodes)
