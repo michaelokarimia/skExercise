@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
@@ -87,9 +89,30 @@ namespace PageScraper
         {
             switch (configLocation)
             {
+                case "configFile":
+                    return getFromConfigfile();
+                    break;
                 default :
                     return getDefaultSettings();
             }
+        }
+
+        private static ScraperConfig getFromConfigfile()
+        {
+           NameValueCollection appSettings =
+           ConfigurationManager.AppSettings;
+
+
+            var wotist = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var thingy = ConfigurationSettings.AppSettings["url"];
+            return new ScraperConfig(appSettings.Get("url"),
+                appSettings.Get("singleEventListItemXpath"),
+                appSettings.Get("priceXpath"),
+                appSettings.Get("dateXPath"),
+                appSettings.Get("venueCity"),
+                appSettings.Get("venueName"),
+                appSettings.Get("eventName")
+                );
         }
 
         private static ScraperConfig getDefaultSettings()
