@@ -35,7 +35,7 @@ namespace UnitTests
         [Test]
         public void GetsPriceOfFirstEvent()
         {
-            //Assert.AreEqual("£10.00", scraper.GetAllVisbleEventListings()[0].Price);
+            Assert.AreEqual("£10.00", scraper.EventListings[0].Price);
         }
     }
 }

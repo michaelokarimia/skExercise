@@ -33,12 +33,27 @@ namespace PageScraper
 
         public HtmlDocument Document { get; set; }
 
+        public IList<Event> EventListings
+        {
+            get
+            {
+                return new List<Event> {new Event()};
+
+            }
+        }
+
         public List<HtmlNode> GetAllVisbleEventListings()
         {
             return
                 Document.DocumentNode.SelectNodes(SingleEventListing).ToList();
-        }
+        }   
 
         
+    }
+
+    public class Event
+    {
+
+        public String Price { get; set; }
     }
 }
