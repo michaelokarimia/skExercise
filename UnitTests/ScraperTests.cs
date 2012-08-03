@@ -21,15 +21,15 @@ namespace UnitTests
         }
 
         [Test]
-        public void ScraperCanGetDocumentWithValidUrl()
+        public void ScraperCanGetHTMLGivenAValidUrl()
         {
             Assert.NotNull(scraper.Document);
         }
 
         [Test]
-        public void CanfindNode()
+        public void CanFindTenEventsPerPage()
         {
-            Assert.Equals(10, scraper.GetAllEventNodes().Count);
+            Assert.AreEqual(10, scraper.GetAllVisbleEventListings().Count);
         }
     }
 }
