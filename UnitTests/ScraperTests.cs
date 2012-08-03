@@ -10,12 +10,12 @@ namespace UnitTests
     [TestFixture]
     public class ScraperTests
     {
-        Class1 scraper;
+        PageScraper.PageScraper scraper;
 
         [SetUp]
         public void Setup()
         {
-            scraper = new Class1();
+            scraper = new PageScraper.PageScraper();
             scraper.Scrape();
 
         }

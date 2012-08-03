@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 
 namespace PageScraper
 {
-    public class Class1
+    public class PageScraper
     {
         string url = "http://www.wegottickets.com/searchresults/page/1/all";
 
@@ -27,12 +27,15 @@ namespace PageScraper
             List<string> matchedNodes = new List<string>();
             var content = Document.GetElementbyId("content");
             var nodes =  content.Descendants();
+            //TODO use linq to grab the correct listings
+            
+
             foreach (HtmlNode node in nodes)
             {
                 if (node.Attributes.Contains("class"))
                     matchedNodes.Add(node.ToString());
             }
-           // nodes.Attributes
+          
 
             return matchedNodes;
         }
